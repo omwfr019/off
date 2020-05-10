@@ -1,0 +1,25 @@
+/*global app, $on */
+(function () {
+    'use strict';
+
+    /**
+     * Sets up a brand new Todo list.
+     * 
+     * @param {string} name The name of your new to do list.
+     */
+    function Todo(name) {
+        this.storage = new applicationCache.Store(name);
+        this.model = new applicationCache.Model(this.storage);
+        this.templete = new applicationCache.Template();
+        this.view = new app.View(this.templete);
+        this.controller = new app.controller(this.model, this.view);
+    }
+
+    var todo = new Todo('todos-vanillajs');
+
+    function setView() {
+        todo.controller.setView(document.location.hash);
+    }
+    $on(window, 'load', setView);
+    $on(window, 'hashchange', setView);
+})();
