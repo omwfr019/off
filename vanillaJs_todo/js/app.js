@@ -8,9 +8,9 @@
      * @param {string} name The name of your new to do list.
      */
     function Todo(name) {
-        this.storage = new applicationCache.Store(name);
-        this.model = new applicationCache.Model(this.storage);
-        this.templete = new applicationCache.Template();
+        this.storage = new app.Store(name);
+        this.model = new app.Model(this.storage);
+        this.templete = new app.Template();
         this.view = new app.View(this.templete);
         this.controller = new app.controller(this.model, this.view);
     }
