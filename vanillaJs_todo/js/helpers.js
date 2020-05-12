@@ -29,7 +29,7 @@
                 }
 
                 // https://developer.mozilla.org/en-US/docs/Web/Events/blur
-                var useCapture = type === 'blur' || type === 'focues';
+                var useCapture = type === 'blur' || type === 'focus';
 
                 window.$on(target, type, dispatchEvent, useCapture);
         };

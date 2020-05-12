@@ -191,6 +191,21 @@
        };
 
        /**
+        * Will toggle All checkboxe's on/off state and completeness of models.
+        * Just pass in the event object.
+        */
+       Controller.prototype.toggleAll = function (completed) {
+                var self = this;
+                self.model.read({ completed: !completed }, function (data) {
+                        data.forEach(function (item) {
+                                self.toggleComplete(item.id, completed, true);
+                        });
+                });
+
+                self._filter();
+       };
+
+       /**
         * Updates the pieces of the page which change depending on the remaining
         * number of todos.
         */
