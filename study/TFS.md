@@ -12,7 +12,7 @@ Team Foundation Server
 권장 환경 : Visual Studio, Eclipse
 
 <br/><br/>
-운영 방식 : On-premise, online <br/>
+#### 운영 방식 : On-premise, online
 온라인 : Azure DevOps => Microsoft의 클라우드 플랫폼인 Windows Azure에 의해 지원. 별도의 설정 필요 없이 계정을 생성하여 이용.
 약 3개월 간격으로 버전 업데이트 마이그레이션.
 
