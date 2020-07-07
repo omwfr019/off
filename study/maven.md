@@ -5,7 +5,6 @@ Apache Maven (아파치 메이븐)
 프로젝트의 전체적인 라이프 사이클 관리. <br/>
 
 
-
 > 개발자 : 아파치 소프트웨어 재단 <br/>
 저장소 : https://gitbox.apache.org/repos/asf?p=maven.git <br/>
 프로그래밍 언어 : 자바 <br/>
@@ -18,6 +17,19 @@ Apache Maven (아파치 메이븐)
 
 ### 특징
 * 필요 라이브러리를 pom.xml에 정의 ~> 해당 라이브러리와 관련된 다른 라이브러리까지 자동 다운로드.
+* 플러그인을 구동해주는 프레임워크 (plugin execution framework) ~> 모든 작업은 플러그인에서 수행.
+* 플러그인은 다른 산출물artifacts과 같이 저장소에서 관리됨.
+* 메이븐은 여러 플러그인으로 구성. 각각의 플러그인은 하나 이상의 goal(명령, 작업)을 포함 => goal은 메이븐의 실행단위.
+* 플러그인 + goal의 조합으로 실행.  ex) mvn <plugin>:<goal> = mvn archetype:generate
+* 여러 goal을 묶어 lifecycle phases로 만들고 실행.  ex) mvn <phase> = mvn install
+
+<br/>
+
+### 플러그인
+* Core plugins (기본 단계, 핵심 플러그인) : clean, compiler, deploy, failsafe, install, resources, site, surefire, verifier
+* Packaging types/tools (압축 도구) : ear, ejb, jar, rar, war, app-client, shade
+* Reporting plugins (리포팅 도구) : changelog, changes, checkstyle, javadoc, pmd, surefire-report
+* Tools (기타 도구) : ant, antrun, archetype, assembly, dependency, pdf, plugin, repository
 
 <br/>
 
@@ -25,9 +37,11 @@ Apache Maven (아파치 메이븐)
 소스코드 파일을 컴퓨터에서 실행할 수 있는 독립 소프트웨어 가공물로 변환하는 과정 또는 그에 대한 결과물.
 => 작성한 소스코드(java), 프로젝트에서 쓰인 각각의 파일 및 자원 등(.xml, .jpg, .jar, .properties)을 JVM이나 톰캣같은 WAS가 인식할 수 있는 구조로 패키징 하는 과정 및 결과물.
 
-#### 빌드 도구build tool
+### 빌드 도구build tool
 프로젝트 생성, 테스트 빌드, 배포 등의 작업을 위한 전용 프로그램.
 라이브러리 추가, 버전 동기화 등의 어려움을 해결.
+
+<br/>
 
 ### Maven LifeCycle
 미리 정해진 빌드 순서.
@@ -43,17 +57,32 @@ Apache Maven (아파치 메이븐)
 8. Site : 프로젝트 문서, 사이트 작성 및 생성
 9. Deploy : 만들어진 Package를 원격 저장소에 release
 
-#### 최종 빌드 순서
+### 최종 빌드 순서
 1. compile : src/main/java 디렉토리 하위의 모든 소스 코드 컴파일
 2. test : src/test/java, src/test/resources 테스트 자원 복사 및 테스트 소스 코드 컴파일
     ※junit : 단위 테스트 프레임워크. 테스트 단계를 거치기 위해 의존 설정을 해줌.
 3. packaging : 컴파일과 테스트가 완료된 후 jar, war과 같은 형태로 압축.
 
-#### Phase
-: Build Lifecycle 각각의 단계
+### Phase
+: Build Lifecycle(=프로젝트 생성에 필요한 단계) 각각의 단계(실행단위). default, clean, site.
 => 의존 관계. 순차적으로 실행되어야 함 => 모든 빌드 단계는 이전 단계가 성공적으로 실행되었을 때 실행됨(=Dependency)
+* clean : 빌드 시 생성되었던 산출물을 삭제
+    1. pre-clean : clean 작업 전에 사전작업
+    2. clean : 이전 빌드에서 생성된 모든 파일 삭제
+    3. post-clean : 사후작업
+* default : 프로젝트 배포절차, 패키지 타입별로 다르게 정의됨
+    1. validate : 프로젝트 상태 점검, 빌드에 필요한 정보 유무체크
+    2. initialize : 빌드 상태를 초기화, 속성 설정, 작업 디렉터리 생성
+    3. generate-sources : 컴파일에 필요한 소스 생성
+    4. process-sources : 소스코드를 처리
+    5. generate-resources : 패키지에 포함될 자원 생성
+    6. compile : 프로젝트의 소스코드를 컴파일
+    7. process-classes : 컴파일 후 후처리
+    8. generate-test-source : 테스트를 위한 소스코드를 생성
+    9. process-test-source : 테스트 소스코드 처리
+    10. https://sjh836.tistory.com/131 (이어서)
 
-#### Goal
+### Goal
 : 특정 작업, 최소한의 실행 단위(task) ~> 플러그인에서 실행할 수 있는 각각의 기능.
 > 플러그인의 goal을 실행하는 방법
 mvn groupId:artifacId:version:goal
