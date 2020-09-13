@@ -70,13 +70,21 @@ Oracle
 
 <br/><br/>
 ## 프로시저Procedure
-: Transact-SQL 문장의 집합
-* 어떠한 동작을 절차적 일괄처리 작업
-* 
+: Transact-SQL 문장의 집합. 데이터베이스에 대한 어떤 일련의 작업을 정리한 절차를 관계형 데이터베이스 관리 시스템에 저장한 것 = 영구저장모듈Persistent Storage Module
+* 어떠한 동작을 절차적 일괄처리 (특정 목적을 가지고 모인 순서대로 실행하는 명령어의 집합)
+* 특정 구문을 반복해서 사용할 때 사용하는 PL/SQL BLOCK
+* return 값을 반드시 반환하지 않아도 됨
+* 일반적인 SQL문(select, insert, update, delete, merge 등)에서 사용 불가
+* 사용 방법
+    - SQL PLUS : EXEC 프로시저명;
+    - PL/SQL : BEGIN 프로시저명 END;
 
 
 <br/><br/>
 ## 함수Function
+: RETURN문을 이용해 원하는 값을 반환하기 위해 만듦.
+* 식의 일부로 사용됨
+* return 값, 데이터 타입 필수
 
 
 <br/><br/>
@@ -86,6 +94,10 @@ Oracle
 
 <br/><br/><br/><br/>
 ## MEMO
+
+
+### DUAL 테이블
+: 가상의 테이블. 값이 들어있지 않지만 테이블 역할을 할 수 있음. 주로 함수를 테스트하기 위해 select문을 사용할 때 사용.
 
 
 <br/><br/>
