@@ -2,7 +2,7 @@ Oracle
 ========
 
 
-<br/><br/><br/>
+<br/><br/>
 ### SQL 문 수행 과정
 1. 같은 실행 계획이 공유 풀에 있는지 확인
 2. SQL 문법 검사, DATA DICTIONARY를 검사를 수행하여 해당 사용자 소유의 테이블인지 확인
@@ -31,6 +31,20 @@ Oracle
 * Dirty Buffer : 변경된 데이터를 저장하고 있는 버퍼 영역. Write List로 옮겨짐
 * Aging : 하나의 시스템 내에서의 모든 프로세스는 균등하게 자원을 할당 받아 사용할 수 있어야 함. 같은 시간에 한정된 시스템 자원을 요청한 프로세스들은 요청한 시간 별로 우선순위를 두어 그 자원의 사용권을 할당해 주는 시스템 내부 알고리즘
 
+
+<br/><br/><br/>
+## PL/SQL (ProcedureLanguage/SQL)
+= 스토어드 프로시져
+> DECLARE  -- 변수, 상수 선언 <br/>
+ BEGIN  -- SQL문, PL/SQL문 <br/>
+ EXCEPTION  -- 에러 처리 <br/>
+END;
+
+* 확장된 SQL
+* 일반 SQL과 차이점
+  - 일반 : 클라이언트에서 서버로 단일 쿼리를 보내 실행 ~> 여러 개의 SQL을 실행하면 실행한 SQL 개수만큼 처리됨
+  - PL/SQL : 서버에서 스토어드 프로시져를 생성한 후 클라이언트에서 호출하여 실행 ~> 여러 개의 SQL을 실행하면 하나의 스토어드 프로시져에 담아 컴파일하여 서버에 생성한 후 한 번만 호출하여 실행
+* CREATE, GRANT는 PL/SQL 블록에서 사용 불가
 
 
 <br/><br/><br/>
@@ -89,6 +103,44 @@ Oracle
 
 <br/><br/>
 ## 트리거Trigger
+: 테이블에 변경(INSERT, UPDATE, DELETE)이 가해졌을 때 묵시적으로(자동으로) 수행되는 프로시저.
+* 오라클 DB 자체에 저장
+* View에서 동작하지 않음
+* 사용자가 직접 호출 불가
+* 트리거를 위해 자동으로 만들어지는 논리적 가상 테이블 : INSERTED, DELETED
+  UPDATE(INSERTED+DELETED) ~> 기존 값 제거 후 새로운 값 추가. 동시 존재.
+  INSERTED 테이블에는 변경될 새로운 내용이, DELETED 테이블에는 제거 되기 바로 전의 데이터 들이 저장됨
+
+
+<br/><br/>
+## 도메인Domain
+
+
+<br/><br/>
+## Bind Variable 바인드 변수
+: 최초 수행할 때 최적화를 거친 실행계획을 캐시에 적재 -> 실행시점에 그대로 가져와 값을 다르게 바인딩하며 반복 재사용.
+> var [변수] [변수타입] <br/>
+exec [:변수] := [값] <br/>
+SELECT * FROM tablename WHERE col > [:변수];
+
+SQL문 실행 => 문장에 대한 구문검사 및 문법적 오류 검사 -> 실행 계획을 세움
+동일한 SQL문 반복 실행 => 이전 실행 문장인지 메모리에서 탐색 -> 찾을 경우 검사 과정 생략
+하지만, 조건절 등을 상수로 처리할 시 같은 SQL 문장으로 인식 불가 ~> '바인드 변수'를 이용해 동일한 문장으로 인식.
+* DECLARE 내부에서 var 로 선언
+* 세션에서 전역적으로 선언. 블럭 내부에서 var 선언 불가
+* 처리 속도가 빠름 (성능 향상)
+* 호스트 환경에서 생성
+* PL/SQL 변수가 아님
+* 컬럼 히스토그램 정보를 사용하지 못함
+
+
+<br/><br/>
+## 치환
+: 특정 문자열을 미리 선언한 변수로 바꿈.
+> defing name1 = 'test' <br/>
+ select * from &name1; <br/>
+ undefine name1
+ 
 
 
 
@@ -102,7 +154,7 @@ Oracle
 
 <br/><br/>
 ### 오라클 버전 확인
-> SELECT * FROM product_component_version;
+> SELECT * FROM product_component_version; <br/>
 > SELECT * FROM v$version;
 
 
