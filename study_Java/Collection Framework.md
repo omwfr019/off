@@ -253,3 +253,41 @@ q.offer("2");
 while(!st.empty()) { System.out.print(st.pop()); }	// 210
 while(!q.isEmpty()) { System.out.print(q.poll()); }	// 012
 ```
+
+#### PriorityQueue
+* Queue 인터페이스의 구현체 중 하나
+* 저장한 순서에 관계없이 우선순위priority가 높은 것부터 꺼내게 됨
+* null 저장 불가 (NullPointerException이 발생)
+* 저장공간으로 배열 사용. 각 요소를 힙heap 자료구조 형태로 저장 (힙은 가장 큰/작은 값을 빠르게 찾을 수 있음)
+
+#### Deque (Double-Ended Queue) (덱, 디큐)
+* Queue의 변형. 양쪽 끝에 추가/삭제 가능
+* Dequeue의 조상은 Queue. 구현체로는 ArrayDeque, LinkedList 등이 있음
+* 스택과 큐를 하나로 합쳐놓은 것과 같음 (스택으로도, 큐로도 사용 가능)
+
+<br/><br/><br/>
+
+### 컬렉션 요소 접근 인터페이스
+: 컬렉션 프레임웍에선 컬렉션에 저장된 요소들을 읽어오는 방법을 표준화
+
+#### Iterator
+* Collection 인터페이스에서 Iterator를 구현한 클래스의 인스턴스를 반환하는 iterator를 정의
+* iterator()는 Collection 인터페이스에 정의된 메서드이므로 자손인 List, Set에도 포함됨. <br/>
+  ~> List나 Set인터페이스를 구현하는 컬렉션은 iterator()가 각 컬렉션의 특징에 알맞게 작성되어 있음 <br/>
+  ~> 컬렉션 클래스에 대해 iterator()를 호출하여 Iterator를 얻은 다음 반복문을 사용해 컬렉션 클래스의 요소를 읽어옴
+  ``` java
+  List list = new ArrayList();	// 다음 컬렉션으로 변경할 때는 이 부분만 고치면 됨
+  Iterator it = list.iterator();
+  
+  while (it.hasNext()) { System.out.println(it.next()); }
+  ```
+* Map인터페이스를 구현한 컬렉션 클래스는 iterator()를 직접 호출 불가. 대신 keySet()이나 entrySet()과 같은 메서드를 통해 키와 값을 각각 따로 Set의 형태로 얻어 온 후에 다시 iterator()를 호출해야 Iterator를 얻을 수 있음
+  ```
+  Map map = new HastMap();
+  ...
+  Iterator it = map.keySet().iterator();
+  ```
+* List클래스들은 저장순서를 유지하기 때문에 Iterator를 이용해서 읽어 온 결과 역시 저장 순서와 동일 <br/>
+  Set클래스들은 각 요소간의 순서가 유지 되지 않기 때문에 Iterator를 이용해서 읽어 온 결과는 처음에 저장된 순서와 다름
+
+#### ListIterator
