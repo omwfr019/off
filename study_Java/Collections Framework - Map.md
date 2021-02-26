@@ -3,7 +3,7 @@ Collection Framework - Map
 
 <br/>
 
-### Map 인터페이스
+## Map 인터페이스
 * 키key와 값value의 쌍으로 이루어진 데이터의 집합
 * 순서 유지 X
 * key는 중복 허용 X, value는 중복 허용 O <br/>
@@ -13,10 +13,16 @@ Collection Framework - Map
   + Hashtable -> Map <br/>
   + LinkedHashMap -> HastMap -> Map <br/>
   + TreeMap -> SortedMap
-* values()에서는 반환타입이 Collection. keySet()에서는 반환타입이 Set => 값value은 중복을 허용하므로 Collection 타입으로 반환, 키key는 중복을 허용하지 않으므로 Set타입으로 반환
 * 해싱hashing을 사용하기 때문에 많은 양의 데이터를 검색하는데 있어 뛰어난 성능을 보임 <br/>
   => 하나의 키로 검색했을 때 결과가 단 하나. key = unique
+* 시간복잡도 : O(1)
 * Hashtable보다 새로운 버전인 HashMap 사용을 권장
+
+
+#### 특징
+* keySet()에서는 반환타입이 Set => 중복을 허용하지 않기 때문
+* values()에서는 반환타입이 Collection => 중복을 허용하기 때문
+* map.put(null, null);이나 map.get(null);을 허용
 
 #### 메소드
 |메소드|설명|
@@ -44,10 +50,6 @@ Collection Framework - Map
 |int size()|Map에 저장된 key-value쌍의 개수를 반환|
 |Collection values()|Map에 저장된 모든 value객체를 반환|
 
-#### 특징
-* keySet()에서는 반환타입이 Set => 중복을 허용하지 않기 때문
-* values()에서는 반환타입이 Collection => 중복을 허용하기 때문
-* map.put(null, null);이나 map.get(null);을 허용
 
 <br/>
 
@@ -80,17 +82,14 @@ Collection Framework - Map
 
 <br/>
 
----
-
-### HashMap
-
-
 #### HashMap과 HashTable
 * HashMap 사용을 권장
 * HashTable은 HashMap보다 일찍 출시 ~> 하위 호환성을 위해 남아있는 것
 * HashMap은 보조 해시 함수Additional Hash Function를 사용하기 때문에 해시 충돌hash collision이 덜 발생
 
 <br/>
+
+---
 
 ### TreeMap
 : 이진검색트리의 형태로 키와 값의 쌍으로 이루어진 데이터를 저장.
@@ -134,7 +133,11 @@ Collection Framework - Map
 * 해싱을 구현한 컬렉션 클래스 : HashSet, HashMap, Hashtable
 
 배열과 링크드 리스트의 조합으로 이루어짐. <br/>
-저장할 데이터의 키를 해시함수에 넣으면 배열의 한 요소를 얻게 되고, 다시 그 곳에 연결 되어 있는 링크드 리스트에 저장. <br/>
+저장할 데이터의 키를 해시함수에 넣으면 배열의 한 요소를 얻게 되고, 다시 그 곳에 연결 되어 있는 링크드 리스트에 저장.
+
+### 해시 함수
+* 데이터를 고정 길이의 데이터로 매핑하는 함수
+* 하시 함수에 의해 얻어지는 값 : 해시값, 해시코드, 해시체크섬, 해시
 
 #### 과정
 1. 검색하고자 하는 값의 키로 해시함수를 호출
@@ -151,3 +154,36 @@ Collection Framework - Map
 서로 다른 두 객체에 대해 equals()로 비교한 결과가 true인 동시에 hashCode()의 반환값이 같아야 같은 객체로 인식 ~> HashMap도 같은 방법으로 객체를 구별. <br/>
 따라서 equals()를 재정의오버라이딩 하면 hashCode()도 함께 재정의 필요 (equals = true인 두 객체의 hashCode 결과 값이 같도록)
 
+<br/>
+
+### 해시 충돌
+* 해시 함수가 서로 다른 입력값(key)에 대해 동일한 출력값을 반환. <br/>
+  어떤 key가 해시 함수에 의해 변환된 인덱스로 배열에 접근했을 때 이미 값이 들어있는 것.
+* 해시 성능 저하
+
+* 충돌 공격collision attack : 해시 충돌을 일으키는 임의의 두 값을 찾는 과정
+* 역상 공격 : 주어진 값에 대해 그 값과 해시 충돌을 일으키는 값을 찾는 것
+* 충돌 저항성
+  + 약한 충돌 저항성 : 주어진 x에 대해서 H(x) = H(y)인 x, y를 찾는 것이 어려운 경우
+  + 강한 충돌 저항성 : H(x) = H(y)와 같이 같은 해시값을 갖는 x와 y를 찾는 것이 함수의 출력 값 범위 내에서 무시 가능할 때
+
+<br/>
+
+#### Collision Resolution 
+1. Chaining (체이닝)
+    : 배열-연결리스트 형식. 충돌이 일어난 자리에서 값들을 연결리스트로 연결.
+    + Close Addressing 방법 (충돌이 일어나도 해당 위치에 저장)
+2. Open Addressing (개방주소 방법)
+    : 해시 함수에서 계산된 주소에 원소가 있는지 체크 -> 원소가 없으면 넣고, 있으면 정해진 규칙에 따라 다음 자리를 찾음
+    + 추가 공간을 허용하지 않고 주어진 해시 테이블 공간 내에서 해결
+
+3. 버켓
+    : 2차원 배열 형식. 충돌이 일어난 자리에 배열로 쌓음
+    + Close Addressing 방법 (충돌이 일어나도 해당 위치에 저장)
+4. Linear Probing (선형 조사)
+    : 충돌이 일어난 바로 뒷자리를 봄
+    + i번째 해시 함수는 h(x)로 부터 i만큼 떨어짐
+5. Quadratic Probing (이차원 조사)
+    : 충돌이 일어나면 보폭을 이차함수에 의해 넓혀가면서 봄
+6. Double Hashing (더블 해싱)
+    : 두 개의 해시 함수를 사용. 충돌이 생겨 다음 주소를 계산할 때 두 번째 해시 함수값만큼 점프
